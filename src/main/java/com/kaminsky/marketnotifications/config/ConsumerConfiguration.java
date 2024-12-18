@@ -1,6 +1,6 @@
 package com.kaminsky.marketnotifications.config;
 
-import com.kaminsky.marketnotifications.entity.ProcessedOrder;
+import com.kaminsky.entity.MarketOrder;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -16,20 +16,20 @@ import java.util.Map;
 @Configuration
 public class ConsumerConfiguration {
     @Bean
-    public ConsumerFactory<String, ProcessedOrder> consumerFactory() {
+    public ConsumerFactory<String, MarketOrder> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "payed_group");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, ProcessedOrder.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, MarketOrder.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ProcessedOrder> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, ProcessedOrder> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, MarketOrder> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, MarketOrder> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
