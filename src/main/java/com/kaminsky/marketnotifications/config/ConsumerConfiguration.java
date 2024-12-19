@@ -32,6 +32,7 @@ public class ConsumerConfiguration {
         ConcurrentKafkaListenerContainerFactory<String, MarketOrder> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(3);
         return factory;
     }
 
